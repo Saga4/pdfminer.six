@@ -95,15 +95,24 @@ def get_widths2(seq: Iterable[object]) -> dict[int, tuple[float, Point]]:
         if isinstance(v, list):
             if r:
                 char1 = r[-1]
-                for i, (w, vx, vy) in enumerate(choplist(3, v)):
-                    widths[cast(int, char1) + i] = (w, (vx, vy))
+                start = cast(int, char1)
+                m = len(v) // 3
+                for j in range(m):
+                    base = 3 * j
+                    w = v[base]
+                    vx = v[base + 1]
+                    vy = v[base + 2]
+                    widths[start + j] = (w, (vx, vy))
                 r = []
         elif isinstance(v, (int, float)):  # == utils.isnumber(v)
             r.append(v)
             if len(r) == 5:
                 (char1, char2, w, vx, vy) = r
-                for i in range(cast(int, char1), cast(int, char2) + 1):
-                    widths[i] = (w, (vx, vy))
+                start = cast(int, char1)
+                end = cast(int, char2)
+                val = (w, (vx, vy))
+                for i in range(start, end + 1):
+                    widths[i] = val
                 r = []
     return widths
 
